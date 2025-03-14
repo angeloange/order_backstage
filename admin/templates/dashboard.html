@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">儀表板</h1>
+
+<div class="row">
+    <!-- 訂單統計卡片 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-white bg-primary mb-4">
+            <div class="card-body">
+                <h5 class="card-title">今日訂單</h5>
+                <h2 class="display-4">{{ today_orders }}</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="{{ url_for('orders') }}">查看詳情</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 本月訂單 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-white bg-success mb-4">
+            <div class="card-body">
+                <h5 class="card-title">本月訂單</h5>
+                <h2 class="display-4">{{ monthly_orders|default(0) }}</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="{{ url_for('orders') }}">查看詳情</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 熱門飲品數 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-white bg-warning mb-4">
+            <div class="card-body">
+                <h5 class="card-title">熱門飲品數</h5>
+                <h2 class="display-4">{{ popular_drinks|length }}</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="{{ url_for('analytics') }}">查看分析</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 銷售趨勢圖表 -->
+    <div class="col-xl-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-line mr-1"></i>
+                銷售趨勢
+            </div>
+            <div class="card-body">
+                <canvas id="salesTrend" width="100%" height="40"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 熱門飲品 -->
+    <div class="col-xl-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-pie mr-1"></i>
+                熱門飲品排行
+            </div>
+            <div class="card-body">
+                <canvas id="popularDrinks" width="100%" height="50"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 最近訂單表格 -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        最近訂單
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="recentOrdersTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>訂單ID</th>
+                        <th>飲品名稱</th>
+                        <th>冰量</th>
+                        <th>糖量</th>
+                        <th>訂單時間</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.drink_name }}</td>
+                        <td>{{ order.ice_type }}</td>
+                        <td>{{ order.suger_type }}</td>
+                        <td>{{ order.order_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <a href="{{ url_for('order_detail', order_id=order.order_id) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> 查看
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 圖表全局設定
+    Chart.defaults.color = '#E0E0E0';
+    Chart.defaults.borderColor = 'rgba(0, 240, 255, 0.1)';
+    
+    // 熱門飲品圖表
+    var ctxPie = document.getElementById('popularDrinks').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: [{% for drink in popular_drinks %}'{{ drink.drink_name }}',{% endfor %}],
+            datasets: [{
+                data: [{% for drink in popular_drinks %}{{ drink.count }},{% endfor %}],
+                backgroundColor: [
+                    'rgba(0, 240, 255, 0.8)',
+                    'rgba(0, 153, 255, 0.8)',
+                    'rgba(0, 255, 204, 0.8)',
+                    'rgba(51, 255, 255, 0.8)',
+                    'rgba(0, 204, 255, 0.8)'
+                ],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#E0E0E0'
+                    }
+                }
+            }
+        }
+    });
+
+    // 銷售趨勢圖表
+    var ctxLine = document.getElementById('salesTrend').getContext('2d');
+    fetch('/api/sales_data')
+        .then(response => response.json())
+        .then(data => {
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: '每日訂單數',
+                        data: data.data,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+
+    // 初始化訂單表格
+    $('#recentOrdersTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Chinese-traditional.json"
+        },
+        "order": [[4, "desc"]],
+        "pageLength": 5
+    });
+});
+</script>
+{% endblock %}

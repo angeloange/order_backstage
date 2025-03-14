@@ -1,0 +1,188 @@
+:root {
+    --business-white: #FFFFFF;
+    --business-blue: #1E488F;
+    --business-light-blue: #3498DB;
+    --business-gray: #F5F6FA;
+    --business-dark: #2C3E50;
+    --business-border: #E9ECEF;
+    --business-hover: #F8F9FA;
+    --business-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--business-gray);
+    color: var(--business-dark);
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+#sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: var(--business-white);
+    color: var(--tech-text);
+    box-shadow: var(--business-shadow);
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: var(--business-blue);
+    color: white;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+}
+
+#sidebar ul li a {
+    padding: 12px 20px;
+    font-size: 1rem;
+    display: block;
+    color: var(--business-dark);
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+#sidebar ul li a:hover {
+    background: var(--business-hover);
+    border-left: 3px solid var(--business-light-blue);
+    color: var(--business-blue);
+}
+
+#sidebar ul li.active > a {
+    background: var(--business-hover);
+    border-left: 3px solid var(--business-blue);
+    color: var(--business-blue);
+}
+
+#content {
+    width: calc(100% - 250px);
+    min-height: 100vh;
+    padding: 30px;
+    background: var(--tech-dark);
+}
+
+.card-body canvas {
+    max-height: 300px;
+}
+
+.card {
+    background: var(--business-white);
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--business-shadow);
+    margin-bottom: 25px;
+}
+
+.card-header {
+    background: var(--business-white);
+    border-bottom: 1px solid var(--business-border);
+    padding: 15px 20px;
+    color: var(--tech-blue);
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: var(--business-blue);
+    border: none;
+    box-shadow: var(--business-shadow);
+}
+
+.btn-primary:hover {
+    background: var(--business-light-blue);
+    transform: translateY(-2px);
+}
+
+.table {
+    color: var(--tech-text);
+}
+
+.table thead th {
+    border-bottom: 2px solid var(--business-border);
+    background: var(--business-gray);
+    border-color: rgba(0, 240, 255, 0.1);
+    color: var(--business-dark);
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background: var(--business-hover);
+}
+
+.pagination .page-link {
+    color: var(--nordic-accent);
+    border-color: var(--nordic-gray);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--nordic-accent);
+    border-color: var(--nordic-accent);
+}
+
+.alert {
+    background: var(--tech-gray);
+    border-left: 4px solid var(--tech-blue);
+    color: var(--tech-text);
+    border-radius: 8px;
+    border: none;
+    box-shadow: var(--business-shadow);
+}
+
+.navbar {
+    background: var(--business-white) !important;
+    box-shadow: var(--business-shadow);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    #sidebar { 
+        margin-left: -250px; 
+        box-shadow: none;
+    }
+    #content { width: 100%; }
+    #sidebar.active { 
+        margin-left: 0; 
+        box-shadow: var(--business-shadow);
+    }
+}
+
+/* 數據卡片特效 */
+.card.text-white {
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, var(--business-blue), var(--business-light-blue));
+}
+
+.card.text-white::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(0,240,255,0.1), transparent);
+    pointer-events: none;
+}
+
+.card.text-white .card-title {
+    font-weight: 500;
+}
+
+/* 圖表樣式 */
+canvas {
+    filter: drop-shadow(0 0 10px rgba(0,240,255,0.2));
+}
+
+/* 圖表容器 */
+.chart-container {
+    background: var(--business-white);
+    border-radius: 8px;
+    padding: 20px;
+}

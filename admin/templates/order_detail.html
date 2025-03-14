@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1>訂單詳情</h1>
+    </div>
+    <div class="col-md-6 text-right">
+        <a href="{{ url_for('orders') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> 返回訂單列表
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5>訂單 #{{ order.order_id }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>基本資訊</h5>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>訂單時間</th>
+                        <td>{{ order.order_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    </tr>
+                    <tr>
+                        <th>飲品名稱</th>
+                        <td>{{ order.drink_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>冰塊</th>
+                        <td>{{ order.ice_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>糖分</th>
+                        <td>{{ order.suger_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>聯繫電話</th>
+                        <td>{{ order.phone_number or '未提供' }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h5>環境資訊</h5>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>天氣狀況</th>
+                        <td>{{ order.weather_status or '未記錄' }}</td>
+                    </tr>
+                    <tr>
+                        <th>溫度</th>
+                        <td>{{ order.weather_temperature or '未記錄' }} °C</td>
+                    </tr>
+                </table>
+                
+                <h5 class="mt-4">原始語音紀錄</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-muted font-italic">{{ order.order_data or '無語音辨識資料' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
