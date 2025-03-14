@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>智慧點餐助手</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assistant.css') }}">
+    <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
+    <script src="{{ url_for('static', filename='js/live2d.min.js') }}"></script>
+</head>
+<body>
+    <div class="assistant-container">
+        <!-- Live2D 畫布 -->
+        <canvas id="live2d" width="400" height="400"></canvas>
+        
+        <!-- 對話界面 -->
+        <div class="chat-container">
+            <div id="chat-messages"></div>
+            <div class="input-container">
+                <button id="start-voice">開始點餐</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/assistant.js') }}"></script>
+</body>
+</html>

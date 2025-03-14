@@ -1,0 +1,41 @@
+.assistant-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+#live2d {
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    background: white;
+}
+
+.chat-container {
+    width: 300px;
+    margin-left: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+
+#start-voice {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1E488F;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#start-voice:hover {
+    background: #3498DB;
+    transform: translateY(-2px);
+}
